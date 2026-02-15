@@ -1,13 +1,16 @@
 const mainDiv = document.getElementsByTagName("main")[0];
+const productDiv = document.createElement("div");
+productDiv.className =
+  "container mx-auto my-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4";
+const categoriesDiv = document.createElement("div");
+categoriesDiv.className = "container mx-auto my-6 flex gap-4 flex-wrap w-fit";
+mainDiv.append(categoriesDiv, productDiv);
+const active =
+  "px-5 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium shadow-md";
+const inactive =
+  "px-5 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium border border-indigo-600 hover:bg-indigo-50 hover:text-white cursor-pointer capitalize hover:bg-indigo-600 transition";
 
 async function getCategories() {
-  const categoriesDiv = document.createElement("div");
-  categoriesDiv.className = "container mx-auto my-6 flex gap-4 flex-wrap w-fit";
-  const active =
-    "px-5 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium shadow-md";
-  const inactive =
-    "px-5 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium border border-indigo-600 hover:bg-indigo-50 hover:text-white cursor-pointer capitalize hover:bg-indigo-600 transition";
-  mainDiv.appendChild(categoriesDiv);
   const allBtn = createCategoryBtn("All", active);
   categoriesDiv.append(allBtn);
   const categories = await fetchData(
@@ -20,19 +23,31 @@ async function getCategories() {
 }
 
 function createCategoryBtn(category, status) {
+  let url = `https://fakestoreapi.com/products/category/${category}`;
+  if (category === "All") url = "https://fakestoreapi.com/products";
   const categoryBtn = document.createElement("button");
   categoryBtn.className = status;
   categoryBtn.setAttribute("id", category);
+  categoryBtn.addEventListener("click", (e) => {
+    const buttons = e.currentTarget.parentElement.children;
+    for (const ele of buttons) {
+      if (ele === e.currentTarget) {
+        ele.className = active;
+      } else {
+        ele.className = inactive;
+      }
+    }
+    getProducts(url, true);
+  });
   categoryBtn.innerText = category;
   return categoryBtn;
 }
 
-async function getProducts() {
-  const productDiv = document.createElement("div");
-  productDiv.className =
-    "container mx-auto my-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4";
-  mainDiv.appendChild(productDiv);
-  const products = await fetchData("https://fakestoreapi.com/products");
+async function getProducts(url, reset = false) {
+  if (reset) {
+    productDiv.innerHTML = "";
+  }
+  const products = await fetchData(url);
   products.forEach((product) => {
     const card = createProductCard(product);
     productDiv.appendChild(card);
@@ -102,4 +117,4 @@ async function fetchData(url) {
 }
 
 getCategories();
-getProducts();
+getProducts("https://fakestoreapi.com/products");
