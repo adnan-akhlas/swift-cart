@@ -1,9 +1,10 @@
 const mainDiv = document.getElementsByTagName("main")[0];
 const productDiv = document.createElement("div");
 productDiv.className =
-  "container mx-auto my-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4";
+  "container mx-auto my-6 grid px-6 grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4";
 const categoriesDiv = document.createElement("div");
-categoriesDiv.className = "container mx-auto my-6 flex gap-4 flex-wrap w-fit";
+categoriesDiv.className =
+  "container mx-auto my-6 flex px-6 justify-center gap-4 flex-wrap w-fit";
 mainDiv.append(categoriesDiv, productDiv);
 const active =
   "px-5 py-2 rounded-full capitalize bg-indigo-600 text-white text-sm font-medium shadow-md";
@@ -11,7 +12,7 @@ const inactive =
   "px-5 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium border border-indigo-600 hover:bg-indigo-50 hover:text-white cursor-pointer capitalize hover:bg-indigo-600 transition";
 
 const productSkeletonCard = `
-  <div class="w-80 bg-white rounded-2xl shadow-sm p-4 animate-pulse">
+  <div class="bg-white rounded-2xl shadow-sm p-4 animate-pulse">
 
     <div class="bg-gray-200 rounded-xl h-64 w-full"></div>
 
