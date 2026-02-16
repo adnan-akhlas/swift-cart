@@ -1,10 +1,10 @@
 const mainDiv = document.getElementsByTagName("main")[0];
 const productDiv = document.createElement("div");
 productDiv.className =
-  "container mx-auto my-6 grid px-6 grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4";
+  "max-w-7xl mx-auto my-6 grid px-6 grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4";
 const categoriesDiv = document.createElement("div");
 categoriesDiv.className =
-  "container mx-auto my-6 flex px-6 justify-center gap-4 flex-wrap w-fit";
+  "max-w-7xl mx-auto my-6 flex px-6 justify-center gap-4 flex-wrap w-fit";
 mainDiv.append(categoriesDiv, productDiv);
 const active =
   "px-5 py-2 rounded-full capitalize bg-indigo-600 text-white text-sm font-medium shadow-md";
