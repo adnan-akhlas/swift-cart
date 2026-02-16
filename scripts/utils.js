@@ -259,6 +259,8 @@ function syncData() {
 
   modalContent.innerHTML = generateSuccessSync(time);
   document.body.classList.add("overflow-hidden");
+  modal.classList.remove("w-full");
+  modal.classList.add("w-fit");
   modal.showModal();
 
   const timer = setInterval(() => {
@@ -266,6 +268,9 @@ function syncData() {
     if (time >= 0) {
       modalContent.innerHTML = generateSuccessSync(time);
     } else {
+      modal.classList.remove("w-fit");
+      modal.classList.add("w-full");
+
       closeModal();
       clearInterval(timer);
     }
