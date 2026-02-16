@@ -1,4 +1,4 @@
-const cartItems = JSON.parse(localStorage.getItem("cart-items")) || [];
+let cartItems = JSON.parse(localStorage.getItem("cart-items")) || [];
 const mobileNav = document.getElementById("mobile-nav");
 const closeMenuBtn = document.getElementById("close-menu-btn");
 const openMenuBtn = document.getElementById("open-menu-btn");
@@ -6,6 +6,7 @@ const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
 const closeModalBtn = document.getElementById("close-modal-btn");
 const totalCartItemsBadge = document.getElementById("total-cart-items");
+const showCartBtn = document.getElementById("show-cart-btn");
 
 export async function fetchData(url, time = 1500) {
   await new Promise((resolve) => setTimeout(resolve, time));
@@ -96,6 +97,71 @@ export function generateProductCard(product) {
   const addToCardBtn = productCard.children[4].children[1];
   addToCardBtn.addEventListener("click", (e) => addToCart(e, product));
   return productCard;
+}
+
+export function generateCartTable() {
+  const content = `<div class="overflow-hidden px-6 py-14 rounded-xl border border-gray-200 shadow-sm">
+  <table class="min-w-full divide-y divide-gray-200 bg-white text-left">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Product</th>
+        <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Category</th>
+        <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Rating</th>
+        <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Price</th>
+        <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="cart-table-body" class="divide-y divide-gray-200">
+      
+    </tbody>
+  </table>
+</div>`;
+  return content;
+}
+
+export function generateCartTableRow(product) {
+  const content = `<td class="whitespace-nowrap px-6 py-4">
+          <div class="flex items-center gap-4">
+            <div class="h-12 w-12 flex-shrink-0 rounded-lg bg-gray-100 p-1 flex items-center justify-center">
+              <img src="${product.image}" alt="" class="h-full object-contain" />
+            </div>
+            <div class="max-w-[200px] truncate font-medium text-gray-900">
+              ${product.title}
+            </div>
+          </div>
+        </td>
+
+        <td class="whitespace-nowrap px-6 py-4">
+          <span class="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-bold capitalize text-indigo-600">
+            ${product.category}
+          </span>
+        </td>
+
+        <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+          <div class="flex items-center">
+            <i class="fa-solid fa-star mr-1 text-yellow-400"></i>
+            <span class="font-semibold text-gray-800">${product.rating.rate}</span>
+            <span class="ml-1 text-gray-400">(${product.rating.count})</span>
+          </div>
+        </td>
+
+        <td class="whitespace-nowrap px-6 py-4">
+          <span class="text-lg font-bold text-gray-900">$${product.price}</span>
+        </td>
+
+        <td class="whitespace-nowrap px-6 py-4 text-right">
+          <div class="flex justify-end gap-2">
+            <button class="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 transition cursor-pointer">
+              <i class="fa-solid fa-trash"></i>
+              Remove
+            </button>
+          </div>
+        </td>`;
+  const tr = document.createElement("tr");
+  tr.className = "hover:bg-gray-50 transition-colors";
+  tr.innerHTML = content;
+  return tr;
 }
 
 export function generateProductHTML(product) {
@@ -234,11 +300,48 @@ export function addToCart({ currentTarget }, product) {
   currentTarget.setAttribute("disabled", true);
 }
 
+export function removeFromCart(id) {
+  const findProduct = cartItems.find((item) => item.id === id);
+  const product = document.getElementById(findProduct.id);
+  const productBtn = product.children[4].children[1];
+  productBtn.className =
+    "flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 transition flex items-center cursor-pointer justify-center text-sm font-medium gap-2 shadow-md";
+  productBtn.removeAttribute("disabled");
+
+  const filterData = cartItems.filter((item) => item.id !== id);
+  cartItems = filterData;
+  localStorage.setItem("cart-items", JSON.stringify(filterData));
+  totalCartItemsBadge.innerHTML = cartItems.length;
+  showCart();
+}
+
+export function showCart() {
+  if (cartItems.length === 0) {
+    totalCartItemsBadge.classList.add("hidden");
+    closeModal();
+    return;
+  }
+  const table = generateCartTable();
+  modalContent.innerHTML = table;
+  const tableBody = modalContent.children[0].children[0].children[1];
+  cartItems.forEach((item) => {
+    const cartProduct = generateCartTableRow(item);
+    const removeBtn = cartProduct.children[4].children[0].children[0];
+    removeBtn.addEventListener("click", () => removeFromCart(item.id));
+    tableBody.append(cartProduct);
+  });
+  document.body.classList.add("overflow-hidden");
+  modal.classList.add("w-fit");
+  modal.showModal();
+}
+
 closeMenuBtn.addEventListener("click", closeMenu);
 openMenuBtn.addEventListener("click", openMenu);
 
 closeModalBtn.addEventListener("click", closeModal);
 modal.addEventListener("click", closeModalOverlay);
+
+showCartBtn.addEventListener("click", showCart);
 
 function syncData() {
   let time = 3;
