@@ -3,6 +3,7 @@ const closeMenuBtn = document.getElementById("close-menu-btn");
 const openMenuBtn = document.getElementById("open-menu-btn");
 const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
+const closeModalBtn = document.getElementById("close-modal-btn");
 
 export async function fetchData(url, time = 1500) {
   await new Promise((resolve) => setTimeout(resolve, time));
@@ -176,8 +177,15 @@ export function closeModal() {
   modal.close();
 }
 
-closeMenuBtn.addEventListener("click", closeMenu);
+export function closeModalOverlay(e) {
+  if (e.target === modal) {
+    document.body.classList.remove("overflow-hidden");
+    modal.close();
+  }
+}
 
+closeMenuBtn.addEventListener("click", closeMenu);
 openMenuBtn.addEventListener("click", openMenu);
 
-modal.children[0].children[0].addEventListener("click", closeModal);
+closeModalBtn.addEventListener("click", closeModal);
+modal.addEventListener("click", closeModalOverlay);
