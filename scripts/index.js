@@ -2,7 +2,7 @@ import {
   fetchData,
   generateProductCard,
   generateProductSkeleton,
-  showModalListener,
+  showModalListener
 } from "./utils.js";
 
 const trendingDiv = document.getElementById("trending-section");

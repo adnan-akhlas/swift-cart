@@ -1,4 +1,4 @@
-const cartItems = [];
+const cartItems = JSON.parse(localStorage.getItem("cart-items")) || [];
 const mobileNav = document.getElementById("mobile-nav");
 const closeMenuBtn = document.getElementById("close-menu-btn");
 const openMenuBtn = document.getElementById("open-menu-btn");
@@ -48,7 +48,7 @@ export function generateButtonSkeleton() {
 
 export function generateModalContent(product) {
   const content = `
-          <div class="grid md:grid-cols-2 gap-10 items-center bg-white p-8 rounded-2xl shadow-sm">
+          <div class="grid md:grid-cols-2 gap-10 items-center bg-white p-8 rounded-2xl shadow-sm max-w-6xl w-full">
                <!-- Product Image -->
                <div class="bg-gray-100 rounded-2xl p-10 flex justify-center">
                  <img
@@ -151,6 +151,40 @@ export function generateProductHTML(product) {
   return content;
 }
 
+export function generateSuccessSync(time) {
+  const content = `<div
+  class="bg-white rounded-xl shadow-xl p-8 max-w-sm w-full text-center flex flex-col items-center space-y-4"
+>
+  <!-- Success Icon -->
+  <svg
+    class="w-16 h-16 text-indigo-600"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M5 13l4 4L19 7"
+    ></path>
+  </svg>
+
+  <!-- Title -->
+  <h2 class="text-2xl font-bold text-gray-800">Data Synced!</h2>
+
+  <!-- Description -->
+  <p class="text-gray-600">Your data has been successfully synchronized.</p>
+
+  <!-- Countdown Text -->
+  <p class="text-indigo-600 font-semibold">
+    Closing in <span id="timerText">${time}</span> second${time > 1 ? "s" : ""}...
+  </p>
+</div>
+`;
+  return content;
+}
+
 export function getButtonClass(status) {
   const active =
     "px-5 py-2 rounded-full capitalize bg-indigo-600 text-white text-sm font-medium shadow-md";
@@ -192,6 +226,7 @@ export function addToCart({ currentTarget }, product) {
   const itemIsAvailable = cartItems.find((item) => item.id === product.id);
   if (itemIsAvailable) return;
   cartItems.push(product);
+  localStorage.setItem("cart-items", JSON.stringify(cartItems));
   totalCartItemsBadge.innerHTML = cartItems.length;
   totalCartItemsBadge.classList.remove("hidden");
   currentTarget.className =
@@ -204,3 +239,37 @@ openMenuBtn.addEventListener("click", openMenu);
 
 closeModalBtn.addEventListener("click", closeModal);
 modal.addEventListener("click", closeModalOverlay);
+
+function syncData() {
+  let time = 3;
+  if (!cartItems.length) return;
+  cartItems.forEach((element) => {
+    const card = document.getElementById(element.id);
+    const cartBtn = card?.children[4]?.children[1];
+
+    if (cartBtn) {
+      cartBtn.className =
+        "flex-1 bg-gray-200 text-slate-900 rounded-lg py-2 transition flex items-center cursor-not-allowed justify-center text-sm font-medium gap-2 shadow-md";
+      cartBtn.setAttribute("disabled", true);
+    }
+  });
+
+  totalCartItemsBadge.innerHTML = cartItems.length;
+  totalCartItemsBadge.classList.remove("hidden");
+
+  modalContent.innerHTML = generateSuccessSync(time);
+  document.body.classList.add("overflow-hidden");
+  modal.showModal();
+
+  const timer = setInterval(() => {
+    time--;
+    if (time >= 0) {
+      modalContent.innerHTML = generateSuccessSync(time);
+    } else {
+      closeModal();
+      clearInterval(timer);
+    }
+  }, 1000);
+}
+
+setTimeout(syncData, 3000);

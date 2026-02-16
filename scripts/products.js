@@ -4,7 +4,7 @@ import {
   generateProductCard,
   generateProductSkeleton,
   getButtonClass,
-  showModalListener,
+  showModalListener
 } from "./utils.js";
 
 const mainDiv = document.getElementsByTagName("main")[0];
