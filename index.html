@@ -22,9 +22,21 @@
       @theme {
         --font-exo: "Exo", sans-serif;
       }
+      @layer base {
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .scrollbar-hide {
+          -ms-overflow-style: 0; /* IE and Edge */
+          scrollbar-width: 0; /* Firefox */
+        }
+      }
     </style>
   </head>
-  <body class="bg-gray-100 font-exo">
+  <body class="bg-gray-100 font-exo scrollbar-hide">
     <header class="bg-white shadow-sm sticky top-0 z-50 w-full">
       <!-- Navbar -->
       <nav>
@@ -388,6 +400,28 @@
         </div>
       </div>
     </footer>
+
+    <!-- Dialog Modal -->
+    <div>
+      <dialog
+        id="modal"
+        class="rounded-2xl fixed -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-full max-w-6xl shadow-xl"
+      >
+        <div class="bg-white rounded-2xl">
+          <!-- Close Button -->
+          <div class="absolute top-4 right-6">
+            <button
+              class="text-right text-gray-400 hover:text-gray-700 text-3xl"
+            >
+              &times;
+            </button>
+          </div>
+          <!-- Modal Content-->
+          <div id="modal-content"></div>
+        </div>
+      </dialog>
+    </div>
+
     <script src="./index.js"></script>
   </body>
 </html>

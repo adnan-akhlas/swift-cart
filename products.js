@@ -14,6 +14,8 @@ const inactive =
 const mobileNav = document.getElementById("mobile-nav");
 const closeMenuBtn = document.getElementById("close-menu-btn");
 const openMenuBtn = document.getElementById("open-menu-btn");
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modal-content");
 const productSkeletonCard = `
   <div class="bg-white rounded-2xl shadow-sm p-4 animate-pulse">
 
@@ -93,6 +95,58 @@ async function getProducts(url, reset = false) {
   productDiv.innerHTML = "";
   products.forEach((product) => {
     const card = createProductCard(product);
+    card.children[4].children[0].addEventListener("click", () => {
+      modalContent.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-10 items-center bg-white p-8 rounded-2xl shadow-sm">
+             <!-- Product Image -->
+             <div class="bg-gray-100 rounded-2xl p-10 flex justify-center">
+               <img
+                 src="${product.image}"
+                 alt="${product.title}"
+                 class="max-h-[400px] object-contain"
+               />
+             </div>
+             <!-- Product Info -->
+             <div>
+               <!-- Category -->
+               <span class="bg-indigo-100 text-indigo-600 text-xs font-medium px-3 py-1 rounded-full capitalize">
+                 ${product.category}
+               </span>
+               <!-- Title -->
+               <h1 class="text-3xl font-bold text-gray-800 mt-4">
+                 ${product.title}
+               </h1>
+               <!-- Rating -->
+               <div class="flex items-center mt-3 text-gray-600">
+                 <i class="fa-solid fa-star text-yellow-400 mr-2"></i>
+                 <span class="mr-2 font-medium">${product.rating.rate}</span>
+                 <span class="text-sm">(${product.rating.count} reviews)</span>
+               </div>
+               <!-- Price -->
+               <p class="text-3xl font-bold text-indigo-600 mt-5">
+                 $${product.price}
+               </p>
+               <!-- Description -->
+               <p class="text-gray-600 mt-5 leading-relaxed">
+                 ${product.description}
+               </p>
+               <!-- Buttons -->
+               <div class="flex gap-4 mt-8">
+                 <button class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition flex items-center gap-2">
+                   <i class="fa-regular fa-heart"></i>
+                   Wishlist
+                 </button>
+                 <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center gap-2 shadow-md">
+                   <i class="fa-solid fa-cart-shopping"></i>
+                   Add to Cart
+                 </button>
+               </div>
+             </div>
+           </div>
+        `;
+      modal.showModal();
+      document.body.classList.add("overflow-hidden");
+    });
     productDiv.appendChild(card);
   });
 }
@@ -171,4 +225,9 @@ closeMenuBtn.addEventListener("click", function () {
 openMenuBtn.addEventListener("click", function () {
   mobileNav.classList.remove("-top-100");
   mobileNav.classList.add("top-0");
+});
+
+modal.children[0].children[0].addEventListener("click", () => {
+  document.body.classList.remove("overflow-hidden");
+  modal.close();
 });
