@@ -78,17 +78,6 @@ export function generateModalContent(product) {
                  <p class="text-gray-600 mt-5 leading-relaxed">
                    ${product.description}
                  </p>
-                 <!-- Buttons -->
-                 <div class="flex gap-4 mt-8">
-                   <button class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition flex items-center gap-2">
-                     <i class="fa-regular fa-heart"></i>
-                     Wishlist
-                   </button>
-                   <button class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center gap-2 shadow-md">
-                     <i class="fa-solid fa-cart-shopping"></i>
-                     Add to Cart
-                   </button>
-                 </div>
                </div>
              </div>
           `;
