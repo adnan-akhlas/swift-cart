@@ -52,7 +52,7 @@ async function getCategories() {
   }
   const categories = await fetchData(
     "https://fakestoreapi.com/products/categories",
-    2000,
+    1000,
   );
   categoriesDiv.innerHTML = "";
   const allBtn = createCategoryBtn("All", active);
@@ -84,7 +84,7 @@ function createCategoryBtn(category, status) {
   return categoryBtn;
 }
 
-async function getProducts(url, reset = false) {
+async function getProducts(url) {
   productDiv.innerHTML = "";
   for (let i = 1; i <= 8; i++) {
     const card = document.createElement("div");
@@ -208,7 +208,7 @@ function createProductCard(product) {
   return productCard;
 }
 
-async function fetchData(url, time = 3000) {
+async function fetchData(url, time = 4000) {
   await new Promise((resolve) => setTimeout(resolve, time));
   const res = await fetch(url);
   return res.json();

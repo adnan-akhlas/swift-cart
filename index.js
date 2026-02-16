@@ -156,7 +156,7 @@ function createProductCard(product) {
   return productCard;
 }
 
-async function fetchData(url, time = 3000) {
+async function fetchData(url, time = 1500) {
   await new Promise((resolve) => setTimeout(resolve, time));
   const res = await fetch(url);
   return res.json();
