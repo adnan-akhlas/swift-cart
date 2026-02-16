@@ -11,6 +11,9 @@ const active =
 const inactive =
   "px-5 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-medium border border-indigo-600 hover:bg-indigo-50 hover:text-white cursor-pointer capitalize hover:bg-indigo-600 transition";
 
+const mobileNav = document.getElementById("mobile-nav");
+const closeMenuBtn = document.getElementById("close-menu-btn");
+const openMenuBtn = document.getElementById("open-menu-btn");
 const productSkeletonCard = `
   <div class="bg-white rounded-2xl shadow-sm p-4 animate-pulse">
 
@@ -159,3 +162,13 @@ async function fetchData(url, time = 3000) {
 
 getCategories();
 getProducts("https://fakestoreapi.com/products");
+
+closeMenuBtn.addEventListener("click", function () {
+  mobileNav.classList.remove("top-0");
+  mobileNav.classList.add("-top-100");
+});
+
+openMenuBtn.addEventListener("click", function () {
+  mobileNav.classList.remove("-top-100");
+  mobileNav.classList.add("top-0");
+});

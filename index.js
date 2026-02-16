@@ -1,4 +1,7 @@
 const trendingDiv = document.getElementById("trending-section");
+const mobileNav = document.getElementById("mobile-nav");
+const closeMenuBtn = document.getElementById("close-menu-btn");
+const openMenuBtn = document.getElementById("open-menu-btn");
 const productSkeletonCard = `
   <div class="bg-white rounded-2xl shadow-sm p-4 animate-pulse">
 
@@ -39,7 +42,6 @@ async function getTrendingProducts() {
   trendingProducts.forEach((product) => {
     const card = createProductCard(product);
     trendingDiv.appendChild(card);
-    console.log("Done");
   });
 }
 
@@ -106,3 +108,13 @@ async function fetchData(url, time = 3000) {
   return res.json();
 }
 getTrendingProducts();
+
+closeMenuBtn.addEventListener("click", function () {
+  mobileNav.classList.remove("top-0");
+  mobileNav.classList.add("-top-100");
+});
+
+openMenuBtn.addEventListener("click", function () {
+  mobileNav.classList.remove("-top-100");
+  mobileNav.classList.add("top-0");
+});
