@@ -160,6 +160,7 @@ export function generateCartTableRow(product) {
         </td>`;
   const tr = document.createElement("tr");
   tr.className = "hover:bg-gray-50 transition-colors";
+  tr.setAttribute("id", `data-${product.id}`);
   tr.innerHTML = content;
   return tr;
 }
@@ -303,24 +304,26 @@ export function addToCart({ currentTarget }, product) {
 export function removeFromCart(id) {
   const findProduct = cartItems.find((item) => item.id === id);
   const product = document.getElementById(findProduct.id);
-  const productBtn = product.children[4].children[1];
-  productBtn.className =
-    "flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 transition flex items-center cursor-pointer justify-center text-sm font-medium gap-2 shadow-md";
-  productBtn.removeAttribute("disabled");
+  if (product) {
+    const productBtn = product.children[4].children[1];
+    productBtn.className =
+      "flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 transition flex items-center cursor-pointer justify-center text-sm font-medium gap-2 shadow-md";
+    productBtn.removeAttribute("disabled");
+  }
 
   const filterData = cartItems.filter((item) => item.id !== id);
   cartItems = filterData;
   localStorage.setItem("cart-items", JSON.stringify(filterData));
   totalCartItemsBadge.innerHTML = cartItems.length;
-  showCart();
-}
-
-export function showCart() {
   if (cartItems.length === 0) {
     totalCartItemsBadge.classList.add("hidden");
     closeModal();
     return;
   }
+  showCart();
+}
+
+export function showCart() {
   const table = generateCartTable();
   modalContent.innerHTML = table;
   const tableBody = modalContent.children[0].children[0].children[1];
