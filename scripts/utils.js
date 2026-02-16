@@ -1,9 +1,11 @@
+const cartItems = [];
 const mobileNav = document.getElementById("mobile-nav");
 const closeMenuBtn = document.getElementById("close-menu-btn");
 const openMenuBtn = document.getElementById("open-menu-btn");
 const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modal-content");
 const closeModalBtn = document.getElementById("close-modal-btn");
+const totalCartItemsBadge = document.getElementById("total-cart-items");
 
 export async function fetchData(url, time = 1500) {
   await new Promise((resolve) => setTimeout(resolve, time));
@@ -91,6 +93,8 @@ export function generateProductCard(product) {
     "bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4";
   productCard.setAttribute("id", product.id);
   productCard.innerHTML = generateProductHTML(product);
+  const addToCardBtn = productCard.children[4].children[1];
+  addToCardBtn.addEventListener("click", (e) => addToCart(e, product));
   return productCard;
 }
 
@@ -182,6 +186,17 @@ export function closeModalOverlay(e) {
     document.body.classList.remove("overflow-hidden");
     modal.close();
   }
+}
+
+export function addToCart({ currentTarget }, product) {
+  const itemIsAvailable = cartItems.find((item) => item.id === product.id);
+  if (itemIsAvailable) return;
+  cartItems.push(product);
+  totalCartItemsBadge.innerHTML = cartItems.length;
+  totalCartItemsBadge.classList.remove("hidden");
+  currentTarget.className =
+    "flex-1 bg-gray-200 text-slate-900 rounded-lg py-2 transition flex items-center cursor-pointer justify-center text-sm font-medium gap-2 shadow-md disabled:cursor-not-allowed";
+  currentTarget.setAttribute("disabled", true);
 }
 
 closeMenuBtn.addEventListener("click", closeMenu);
