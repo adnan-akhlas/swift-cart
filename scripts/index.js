@@ -2,10 +2,10 @@ import {
   fetchData,
   generateProductCard,
   generateProductSkeleton,
-  showModalListener
+  showModalListener,
 } from "./utils.js";
 
-const trendingDiv = document.getElementById("trending-section");
+const trendingDiv = document.getElementById("trending-section")
 
 async function getTrendingProducts() {
   for (let i = 1; i <= 3; i++) {
